@@ -2,3 +2,6 @@
 /GRUPOST.dbf
 /data-original
 /dbfmigration.7z
+
+__pycache__/
+/.vscode

@@ -1,14 +1,19 @@
 [tool.poetry]
-name = "dbf2csv-py"
-version = "0.1.0"
+name = "dbf2csv"
+version = "0.5.0"
 description = ""
 authors = ["chemacortes <devxtrem@gmail.com>"]
 readme = "README.md"
-packages = [{include = "dbf2csv_py"}]
+packages = [{include = "dbf2csv"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.971"
+black = "^22.8.0"
+ipykernel = "^6.15.3"
 
 [build-system]
 requires = ["poetry-core"]
