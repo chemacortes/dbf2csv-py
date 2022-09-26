@@ -1,5 +1,5 @@
 /.venv
-/GRUPOST.dbf
+/*.dbf
 /data-original
 /dbfmigration.7z
 

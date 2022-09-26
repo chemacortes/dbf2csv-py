@@ -3,6 +3,7 @@ import datetime
 import decimal
 import struct
 from pathlib import Path
+from typing import Union
 
 from .dbfsignature import dbf_version
 
@@ -32,7 +33,6 @@ class DBFile:
             b"<4BIHH20x", data[:32]
         )
 
-        self.data = data
         self.version: int = version
         self.desc: str = dbf_version(version)
         self.last_mod: datetime.date = datetime.date(
@@ -41,11 +41,12 @@ class DBFile:
         self.numrec: int = numrec
         self.lenheader: int = lenheader
 
-        term = data[self.lenheader - 1]
+        term = data[lenheader - 1]
         if term != 0x0D:
-            raise Exception(
-                f"Cabecera termina en {term:#X}, pero debería terminar en 0x0D"
-            )
+            raise Exception(f"Header must ends with '0x0d' (not '{term:#x}')")
+
+        self.header = data[:lenheader]
+        self.records = data[lenheader:]
 
     @property
     def is_implemented(self) -> bool:
@@ -68,7 +69,7 @@ class DBFile:
         start = 68
         stop = self.lenheader - 1
         for fieldpos in range(start, stop, 48):
-            field = self.data[fieldpos : fieldpos + 48]
+            field = self.header[fieldpos : fieldpos + 48]  # noqa: E203
             name, typ, size, deci = struct.unpack(b"<32scBB13x", field)
             name = b2str(name)
             typ = typ.decode()
@@ -83,10 +84,9 @@ class DBFile:
         fmt = "".join("%ds" % fieldinfo[2] for fieldinfo in fds)
         fmtsiz = struct.calcsize(fmt)
 
-        start = self.lenheader
-        stop = len(self.data) - 1
-        for rowpos in range(start, stop, fmtsiz):
-            row = self.data[rowpos : rowpos + fmtsiz]
+        stop = len(self.records) - 1
+        for rowpos in range(0, stop, fmtsiz):
+            row = self.records[rowpos : rowpos + fmtsiz]  # noqa: E203
             record = struct.unpack(fmt, row)
             if record[0] != b" ":
                 continue  # deleted record
@@ -116,10 +116,10 @@ class DBFile:
                 result.append(value)
             yield result
 
-    def to_csv(self, fname):
+    def to_csv(self, fname: Union[str, Path]):
         fieldnames = [field[0] for field in self.fields()]
 
-        with open(fname, "w", newline="") as g:
+        with open(fname, "w", newline="", encoding="utf8") as g:
             writer = csv.writer(g, quoting=csv.QUOTE_MINIMAL)
             writer.writerow(fieldnames)
             writer.writerows(self.rows())

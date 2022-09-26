@@ -44,5 +44,5 @@ if __name__ == "__main__":
         print(f"\n\nFORMATO '{db.desc}' NO IMPLEMENTADO TODAVÍA")
         sys.exit()
 
-    print(f"Creado fichero '{csv_file}'")
+    print(f"\nCreado fichero '{csv_file}'")
     db.to_csv(csv_file)
