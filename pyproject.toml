@@ -1,10 +1,28 @@
 [tool.poetry]
-name = "dbf2csv"
-version = "0.5.0"
-description = ""
+name = "dbf2csv-dbase7"
+version = "0.6.0"
+description = "File converter from DBF to CSV (only for dBASE 7)"
 authors = ["chemacortes <devxtrem@gmail.com>"]
 readme = "README.md"
 packages = [{include = "dbf2csv"}]
+homepage = "https://github.com/chemacortes/dbf2csv-py"
+license = "MIT"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Framework :: IPython",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Typing :: Typed",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,3 +36,9 @@ ipykernel = "^6.15.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+dbf2csv = 'dbf2csv.__main__:run'
+
+[tool.poetry.plugins."pipx.run"]
+dbf2csv = 'dbf2csv.__main__:run'

@@ -1,1 +1,1 @@
-from .dbreader import dbf2csv, DBFile # noqa
+from .dbfreader import dbf2csv, DBFile # noqa
