@@ -1,7 +1,7 @@
 import csv
+import datetime
 import decimal
 import struct
-from datetime import date
 from pathlib import Path
 
 from .dbfsignature import dbf_version
@@ -35,7 +35,9 @@ class DBFile:
         self.data = data
         self.version: int = version
         self.desc: str = dbf_version(version)
-        self.last_mod: date = date(year=1900 + y, month=m, day=d)
+        self.last_mod: datetime.date = datetime.date(
+            year=1900 + y, month=m, day=d
+        )
         self.numrec: int = numrec
         self.lenheader: int = lenheader
 
@@ -114,11 +116,10 @@ class DBFile:
                 result.append(value)
             yield result
 
-    def to_csv(self, fname: str | Path):
+    def to_csv(self, fname):
         fieldnames = [field[0] for field in self.fields()]
-        del fieldnames[0]
 
         with open(fname, "w", newline="") as g:
-            writer = csv.writer(g, quoting=csv.QUOTE_NONNUMERIC)
+            writer = csv.writer(g, quoting=csv.QUOTE_MINIMAL)
             writer.writerow(fieldnames)
             writer.writerows(self.rows())
