@@ -3,56 +3,60 @@
 import sys
 from pathlib import Path
 
-from .dbfreader import DBFile
+from dbf2csv.dbfreader import DBFile
 
 
-def usage():
-    print(
-        """
-    dbf2csv - Conversor de DBF a CSV
-
-    Uso:
-        dbf2csv dbf_file <csv_file>
-
-    """
+def usage() -> str:
+    return """
+    | dbf2csv - Conversor de DBF a CSV
+    |
+    | Uso:
+    |    dbf2csv dbf_file <csv_file>
+    """.replace(
+        " " * 4 + "|", ""
     )
 
 
-def convert(dbf_file, csv_file=None):
+def convert(dbf_file: Path, csv_file: "Path | None" = None) -> "int | str":
+
+    if not dbf_file.exists():
+        return f"ERROR: Fichero {dbf_file} no encontrado"
+
+    if not csv_file:
+        csv_file = dbf_file.with_suffix(".csv")
+
     db = DBFile(dbf_file.read_bytes())
-    print(f"Fichero DBF '{dbf_file}' ({db.desc})")
+    print(f"\nFichero DBF '{dbf_file}' ({db.desc})")
     print(f"Tamaño: {db.numrec} registros")
     print(f"Última modificación: {db.last_mod}")
     if not db.is_implemented:
-        print(f"\n\nFORMATO '{db.desc}' NO IMPLEMENTADO TODAVÍA")
-        sys.exit()
+        return f"\n\nFORMATO '{db.desc}' NO IMPLEMENTADO TODAVÍA"
 
+    print(f"Conversión {dbf_file} --> {csv_file}")
     print(f"\nCreado fichero '{csv_file}'")
     db.to_csv(csv_file)
 
+    return 0
 
-def run():
+
+def run() -> "int | str":
 
     if len(sys.argv) <= 1:
-        print("\nERROR: No me has pasado el fichero DBF")
-        usage()
-        sys.exit(1)
-
-    dbf_file = Path(sys.argv[1])
-    csv_file = (
-        Path(sys.argv[2])
-        if len(sys.argv) > 2
-        else dbf_file.with_suffix(".csv")
-    )
-    print(f"Conversión {dbf_file} --> {csv_file}")
+        print(usage())
+        return "ERROR: No he recibido ningún fichero DBF para convertir"
+    elif len(sys.argv) == 2:
+        dbf_file = Path(sys.argv[1])
+        csv_file = None
+    else:
+        dbf_file = Path(sys.argv[1])
+        csv_file = Path(sys.argv[2])
 
     if not dbf_file.exists():
-        print(f"Fichero {dbf_file} no encontrado")
-        sys.exit(1)
+        return f"ERROR: Fichero {dbf_file} no encontrado"
 
-    convert(dbf_file, csv_file)
+    return convert(dbf_file, csv_file)
 
 
 if __name__ == "__main__":
 
-    run()
+    sys.exit(run())

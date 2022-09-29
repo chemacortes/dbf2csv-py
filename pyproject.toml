@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dbf2csv-dbase7"
-version = "0.6.0"
+version = "0.6.1"
 description = "File converter from DBF to CSV (only for dBASE 7)"
 authors = ["chemacortes <devxtrem@gmail.com>"]
 readme = "README.md"
