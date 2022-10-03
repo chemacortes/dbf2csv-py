@@ -33,3 +33,17 @@ Lo que añade la utilidad `dbf2csv`:
 ```
 $ dbf2csv <fichero.dbf>
 ```
+
+
+## Referencias: formatos de ficheros
+
+- [Data File Header Structure for the dBASE Version 7 Table File][1]
+- [dBASE File Format (with coding details): DBF and DBT/FPT file structure][2]
+- [dBASE Table File Format (DBF)][3]
+- [Xbase Data file (*.dbf)][4]
+
+
+[1]: http://www.dbase.com/KnowledgeBase/int/db7_file_fmt.htm
+[2]: http://www.independent-software.com/dbase-dbf-dbt-file-format.html
+[3]: https://www.loc.gov/preservation/digital/formats/fdd/fdd000325.shtml
+[4]: https://www.clicketyclick.dk/databases/xbase/format/dbf.html
