@@ -13,7 +13,7 @@ def usage() -> str:
     | Uso:
     |    dbf2csv dbf_file <csv_file>
     """.replace(
-        " " * 4 + "|", ""
+        "    |", ""
     )
 
 
